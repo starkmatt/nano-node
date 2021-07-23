@@ -158,15 +158,15 @@ nano::block_hash nano::ledger_constants::genesis_hash () const
 	return result;
 }
 
-nano::hardened_constants & nano::hardened_constants::get()
+nano::hardened_constants & nano::hardened_constants::get ()
 {
-    static hardened_constants instance{};
-    return instance;
+	static hardened_constants instance{};
+	return instance;
 }
 
-nano::hardened_constants::hardened_constants ()
-: not_an_account{},
-  random_128{}
+nano::hardened_constants::hardened_constants () :
+	not_an_account{},
+	random_128{}
 {
 	nano::random_pool::generate_block (not_an_account.bytes.data (), not_an_account.bytes.size ());
 	nano::random_pool::generate_block (random_128.bytes.data (), random_128.bytes.size ());

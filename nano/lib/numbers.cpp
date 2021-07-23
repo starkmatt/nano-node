@@ -62,10 +62,9 @@ std::string nano::public_key::to_account () const
 	return result;
 }
 
-nano::public_key::public_key (std::nullptr_t)
-: uint256_union{nano::hardened_constants::get().not_an_account}
+nano::public_key::public_key (std::nullptr_t) :
+	uint256_union{ nano::hardened_constants::get ().not_an_account }
 {
-
 }
 
 std::string nano::public_key::to_node_id () const
@@ -948,12 +947,12 @@ nano::public_key::operator nano::hash_or_account const & () const
 
 bool nano::public_key::operator== (std::nullptr_t) const
 {
-    return bytes == nano::hardened_constants::get().not_an_account.bytes;
+	return bytes == nano::hardened_constants::get ().not_an_account.bytes;
 }
 
 bool nano::public_key::operator!= (std::nullptr_t) const
 {
-    return !(*this == nullptr);
+	return !(*this == nullptr);
 }
 
 nano::block_hash::operator nano::link const & () const

@@ -662,7 +662,7 @@ void nano::json_handler::account_info ()
 				response_l.put ("representative", info.representative.to_account ());
 				if (include_confirmed)
 				{
-					nano::account confirmed_representative{ nullptr};
+					nano::account confirmed_representative{ nullptr };
 					if (confirmed_frontier_block)
 					{
 						confirmed_representative = confirmed_frontier_block->representative ();

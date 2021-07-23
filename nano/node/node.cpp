@@ -1739,7 +1739,7 @@ void nano::node::populate_backlog ()
 {
 	auto done = false;
 	uint64_t const chunk_size = 65536;
-	nano::account next { nullptr };
+	nano::account next{ nullptr };
 	uint64_t total = 0;
 	while (!stopped && !done)
 	{

@@ -405,13 +405,13 @@ namespace dev
 class hardened_constants
 {
 public:
-    static hardened_constants & get ();
+	static hardened_constants & get ();
 
 	nano::account not_an_account;
 	nano::uint128_union random_128;
 
 private:
-    hardened_constants ();
+	hardened_constants ();
 };
 
 /** Node related constants whose value depends on the active network */
