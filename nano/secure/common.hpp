@@ -99,7 +99,7 @@ public:
 	size_t db_size () const;
 	nano::epoch epoch () const;
 	nano::block_hash head{ 0 };
-	nano::account representative{ 0 };
+	nano::account representative{ nullptr };
 	nano::block_hash open_block{ 0 };
 	nano::amount balance{ 0 };
 	/** Seconds since posix epoch */
@@ -119,7 +119,7 @@ public:
 	size_t db_size () const;
 	bool deserialize (nano::stream &);
 	bool operator== (nano::pending_info const &) const;
-	nano::account source{ 0 };
+	nano::account source{ nullptr };
 	nano::amount amount{ 0 };
 	nano::epoch epoch{ nano::epoch::epoch_0 };
 };
@@ -131,7 +131,7 @@ public:
 	bool deserialize (nano::stream &);
 	bool operator== (nano::pending_key const &) const;
 	nano::account const & key () const;
-	nano::account account{ 0 };
+	nano::account account{ nullptr };
 	nano::block_hash hash{ 0 };
 };
 
@@ -202,7 +202,7 @@ public:
 	void serialize (nano::stream &) const;
 	bool deserialize (nano::stream &);
 	std::shared_ptr<nano::block> block;
-	nano::account account{ 0 };
+	nano::account account{ nullptr };
 	/** Seconds since posix epoch */
 	uint64_t modified{ 0 };
 	nano::signature_verification verified{ nano::signature_verification::unknown };
@@ -214,7 +214,7 @@ class block_info final
 public:
 	block_info () = default;
 	block_info (nano::account const &, nano::amount const &);
-	nano::account account{ 0 };
+	nano::account account{ nullptr };
 	nano::amount balance{ 0 };
 };
 
@@ -401,13 +401,17 @@ namespace dev
 	extern nano::uint128_t genesis_amount;
 }
 
-/** Constants which depend on random values (this class should never be used globally due to CryptoPP globals potentially not being initialized) */
-class random_constants
+/** Constants which depend on random values (always used as singleton) */
+class hardened_constants
 {
 public:
-	random_constants ();
+    static hardened_constants & get ();
+
 	nano::account not_an_account;
 	nano::uint128_union random_128;
+
+private:
+    hardened_constants ();
 };
 
 /** Node related constants whose value depends on the active network */
@@ -484,7 +488,6 @@ public:
 	network_constants network;
 	protocol_constants protocol;
 	ledger_constants ledger;
-	random_constants random;
 	voting_constants voting;
 	node_constants node;
 	portmapping_constants portmapping;

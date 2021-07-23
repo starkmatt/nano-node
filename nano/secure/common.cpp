@@ -117,7 +117,7 @@ nano::ledger_constants::ledger_constants (nano::networks network_a) :
 	nano_live_genesis (parse_block_from_genesis_data (live_genesis_data)),
 	nano_test_genesis (parse_block_from_genesis_data (test_genesis_data)),
 	genesis (network_a == nano::networks::nano_dev_network ? nano_dev_genesis : network_a == nano::networks::nano_beta_network ? nano_beta_genesis : network_a == nano::networks::nano_test_network ? nano_test_genesis : nano_live_genesis),
-	burn_account (0),
+	burn_account (nullptr),
 	nano_dev_final_votes_canary_account (dev_public_key_data),
 	nano_beta_final_votes_canary_account (beta_canary_public_key_data),
 	nano_live_final_votes_canary_account (live_canary_public_key_data),
@@ -158,7 +158,15 @@ nano::block_hash nano::ledger_constants::genesis_hash () const
 	return result;
 }
 
-nano::random_constants::random_constants ()
+nano::hardened_constants & nano::hardened_constants::get()
+{
+    static hardened_constants instance{};
+    return instance;
+}
+
+nano::hardened_constants::hardened_constants ()
+: not_an_account{},
+  random_128{}
 {
 	nano::random_pool::generate_block (not_an_account.bytes.data (), not_an_account.bytes.size ());
 	nano::random_pool::generate_block (random_128.bytes.data (), random_128.bytes.size ());

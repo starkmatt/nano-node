@@ -103,10 +103,8 @@ namespace transport
 			{
 				return node_id.get ();
 			}
-			else
-			{
-				return 0;
-			}
+
+			return nullptr;
 		}
 
 		void set_node_id (nano::account node_id_a)

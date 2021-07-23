@@ -575,9 +575,9 @@ TEST (node, confirm_locked)
 	system.wallet (0)->enter_password (transaction, "1");
 	auto block = nano::send_block_builder ()
 				 .previous (0)
-				 .destination (0)
+				 .destination (nullptr)
 				 .balance (0)
-				 .sign (nano::keypair ().prv, 0)
+				 .sign (nano::keypair ().prv, nullptr)
 				 .work (0)
 				 .build_shared ();
 	system.nodes[0]->network.flood_block (block);
@@ -3133,7 +3133,7 @@ TEST (node, epoch_conflict_confirm)
 	auto epoch_open = builder.make_block ()
 					  .account (change->root ().as_account ())
 					  .previous (0)
-					  .representative (0)
+					  .representative (nullptr)
 					  .balance (0)
 					  .link (node0->ledger.epoch_link (nano::epoch::epoch_1))
 					  .sign (epoch_signer.prv, epoch_signer.pub)
@@ -3253,7 +3253,7 @@ TEST (node, fork_election_invalid_block_signature)
 				 .balance (nano::dev::genesis_amount - 2 * nano::Gxrb_ratio)
 				 .link (nano::dev::genesis_key.pub)
 				 .work (*system.work.generate (genesis.hash ()))
-				 .sign (nano::dev::genesis_key.prv, 0) // Invalid signature
+				 .sign (nano::dev::genesis_key.prv, nullptr) // Invalid signature
 				 .build_shared ();
 	auto channel1 (node1.network.udp_channels.create (node1.network.endpoint ()));
 	node1.network.inbound (nano::publish (send1), channel1);

@@ -228,7 +228,7 @@ void nano::frontier_req_client::next ()
 		Add empty record */
 		if (accounts.size () != max_size)
 		{
-			accounts.emplace_back (nano::account (0), nano::block_hash (0));
+			accounts.emplace_back (nano::account (nullptr), nano::block_hash (0));
 		}
 	}
 	// Retrieving accounts from deque
@@ -364,7 +364,7 @@ void nano::frontier_req_server::next ()
 		Add empty record to finish frontier_req_server */
 		if (accounts.size () != max_size)
 		{
-			accounts.emplace_back (nano::account (0), nano::block_hash (0));
+			accounts.emplace_back (nano::account (nullptr), nano::block_hash (0));
 		}
 	}
 	// Retrieving accounts from deque

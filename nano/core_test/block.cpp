@@ -99,7 +99,7 @@ TEST (block, receive_serialize_json)
 
 TEST (block, open_serialize_json)
 {
-	nano::open_block block1 (0, 1, 0, nano::keypair ().prv, 0, 0);
+	nano::open_block block1 (0, 1, nullptr, nano::keypair ().prv, nullptr, 0);
 	std::string string1;
 	block1.serialize_json (string1);
 	ASSERT_NE (0, string1.size ());
@@ -232,7 +232,7 @@ TEST (receive_block, deserialize)
 
 TEST (open_block, deserialize)
 {
-	nano::open_block block1 (0, 1, 0, nano::keypair ().prv, 0, 0);
+	nano::open_block block1 (0, 1, nullptr, nano::keypair ().prv, nullptr, 0);
 	ASSERT_EQ (block1.hash (), block1.hash ());
 	std::vector<uint8_t> bytes;
 	{
@@ -443,9 +443,9 @@ TEST (block_uniquer, single)
 	nano::keypair key;
 	nano::state_block_builder builder;
 	auto block1 = builder
-				  .account (0)
+				  .account (nullptr)
 				  .previous (0)
-				  .representative (0)
+				  .representative (nullptr)
 				  .balance (0)
 				  .link (0)
 				  .sign (key.prv, key.pub)
@@ -470,9 +470,9 @@ TEST (block_uniquer, cleanup)
 	nano::keypair key;
 	nano::state_block_builder builder;
 	auto block1 = builder
-				  .account (0)
+				  .account (nullptr)
 				  .previous (0)
-				  .representative (0)
+				  .representative (nullptr)
 				  .balance (0)
 				  .link (0)
 				  .sign (key.prv, key.pub)
@@ -480,9 +480,9 @@ TEST (block_uniquer, cleanup)
 				  .build_shared ();
 	auto block2 = builder
 				  .make_block ()
-				  .account (0)
+				  .account (nullptr)
 				  .previous (0)
-				  .representative (0)
+				  .representative (nullptr)
 				  .balance (0)
 				  .link (0)
 				  .sign (key.prv, key.pub)
@@ -531,9 +531,9 @@ TEST (block_builder, zeroed_state_block)
 	nano::state_block_builder state_builder;
 	// Make sure manually- and builder constructed all-zero blocks have equal hashes, and check signature.
 	auto zero_block_manual = state_builder
-							 .account (0)
+							 .account (nullptr)
 							 .previous (0)
-							 .representative (0)
+							 .representative (nullptr)
 							 .balance (0)
 							 .link (0)
 							 .sign (key.prv, key.pub)

@@ -156,7 +156,7 @@ bool nano::block::has_sideband () const
 
 nano::account const & nano::block::representative () const
 {
-	static nano::account rep{ 0 };
+	static nano::account rep{ nullptr };
 	return rep;
 }
 
@@ -168,7 +168,7 @@ nano::block_hash const & nano::block::source () const
 
 nano::account const & nano::block::destination () const
 {
-	static nano::account destination{ 0 };
+	static nano::account destination{ nullptr };
 	return destination;
 }
 
@@ -180,7 +180,7 @@ nano::link const & nano::block::link () const
 
 nano::account const & nano::block::account () const
 {
-	static nano::account account{ 0 };
+	static nano::account account{ nullptr };
 	return account;
 }
 

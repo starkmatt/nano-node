@@ -492,7 +492,7 @@ int main (int argc, char * const * argv)
 			}
 
 			nano::work_pool work (std::numeric_limits<unsigned>::max (), pow_rate_limiter);
-			nano::change_block block (0, 0, nano::keypair ().prv, 0, 0);
+			nano::change_block block (0, nullptr, nano::keypair ().prv, nullptr, 0);
 			if (!result)
 			{
 				std::cerr << boost::str (boost::format ("Starting generation profiling. Difficulty: %1$#x (%2%x from base difficulty %3$#x)\n") % difficulty % nano::to_string (nano::difficulty::to_multiplier (difficulty, network_constants.publish_full.base), 4) % network_constants.publish_full.base);
@@ -614,7 +614,7 @@ int main (int argc, char * const * argv)
 								return opencl->generate_work (version_a, root_a, difficulty_a);
 							}
 																							   : std::function<boost::optional<uint64_t> (nano::work_version const, nano::root const &, uint64_t, std::atomic<int> &)> (nullptr));
-							nano::change_block block (0, 0, nano::keypair ().prv, 0, 0);
+							nano::change_block block (0, nullptr, nano::keypair ().prv, nullptr, 0);
 							std::cerr << boost::str (boost::format ("Starting OpenCL generation profiling. Platform: %1%. Device: %2%. Threads: %3%. Difficulty: %4$#x (%5%x from base difficulty %6$#x)\n") % platform % device % threads % difficulty % nano::to_string (nano::difficulty::to_multiplier (difficulty, network_constants.publish_full.base), 4) % network_constants.publish_full.base);
 							for (uint64_t i (0); true; ++i)
 							{
@@ -1451,7 +1451,7 @@ int main (int argc, char * const * argv)
 					}
 				}
 				uint64_t previous_timestamp (0);
-				nano::account calculated_representative (0);
+				nano::account calculated_representative (nullptr);
 				while (!hash.is_zero () && block != nullptr)
 				{
 					++block_count;
@@ -1696,7 +1696,7 @@ int main (int argc, char * const * argv)
 				else
 				{
 					// Check if pending destination is correct
-					nano::account destination (0);
+					nano::account destination (nullptr);
 					bool previous_pruned = node->ledger.pruning && node->store.pruned.exists (transaction, block->previous ());
 					if (previous_pruned)
 					{

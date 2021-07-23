@@ -494,7 +494,7 @@ TEST (rpc, send_idempotent)
 	request.put ("wallet", wallet);
 	request.put ("action", "send");
 	request.put ("source", nano::dev::genesis_key.pub.to_account ());
-	request.put ("destination", nano::account (0).to_account ());
+	request.put ("destination", nano::account (nullptr).to_account ());
 	request.put ("amount", (nano::dev::genesis_amount - (nano::dev::genesis_amount / 4)).convert_to<std::string> ());
 	request.put ("id", "123abc");
 	auto response (wait_response (system, rpc, request));
@@ -710,7 +710,7 @@ TEST (rpc, wallet_representative_set_force)
 		auto transaction (node->wallets.tx_begin_read ());
 		ASSERT_EQ (key.pub, node->wallets.items.begin ()->second->store.representative (transaction));
 	}
-	nano::account representative (0);
+	nano::account representative (nullptr);
 	while (representative != key.pub)
 	{
 		auto transaction (node->store.tx_begin_read ());
@@ -1001,14 +1001,14 @@ TEST (rpc, frontier)
 			nano::random_pool::generate_block (hash.bytes.data (), hash.bytes.size ());
 			source[key.pub] = hash;
 			node->store.confirmation_height.put (transaction, key.pub, { 0, nano::block_hash (0) });
-			node->store.account.put (transaction, key.pub, nano::account_info (hash, 0, 0, 0, 0, 0, nano::epoch::epoch_0));
+			node->store.account.put (transaction, key.pub, nano::account_info (hash, nullptr, 0, 0, 0, 0, nano::epoch::epoch_0));
 		}
 	}
 	nano::keypair key;
 	auto [rpc, rpc_ctx] = add_rpc (system, node);
 	boost::property_tree::ptree request;
 	request.put ("action", "frontiers");
-	request.put ("account", nano::account (0).to_account ());
+	request.put ("account", nano::account (nullptr).to_account ());
 	request.put ("count", std::to_string (std::numeric_limits<uint64_t>::max ()));
 	auto response (wait_response (system, rpc, request));
 	auto & frontiers_node (response.get_child ("frontiers"));
@@ -1039,14 +1039,14 @@ TEST (rpc, frontier_limited)
 			nano::random_pool::generate_block (hash.bytes.data (), hash.bytes.size ());
 			source[key.pub] = hash;
 			node->store.confirmation_height.put (transaction, key.pub, { 0, nano::block_hash (0) });
-			node->store.account.put (transaction, key.pub, nano::account_info (hash, 0, 0, 0, 0, 0, nano::epoch::epoch_0));
+			node->store.account.put (transaction, key.pub, nano::account_info (hash, nullptr, 0, 0, 0, 0, nano::epoch::epoch_0));
 		}
 	}
 	nano::keypair key;
 	auto [rpc, rpc_ctx] = add_rpc (system, node);
 	boost::property_tree::ptree request;
 	request.put ("action", "frontiers");
-	request.put ("account", nano::account (0).to_account ());
+	request.put ("account", nano::account (nullptr).to_account ());
 	request.put ("count", std::to_string (100));
 	auto response (wait_response (system, rpc, request));
 	auto & frontiers_node (response.get_child ("frontiers"));
@@ -1067,7 +1067,7 @@ TEST (rpc, frontier_startpoint)
 			nano::random_pool::generate_block (hash.bytes.data (), hash.bytes.size ());
 			source[key.pub] = hash;
 			node->store.confirmation_height.put (transaction, key.pub, { 0, nano::block_hash (0) });
-			node->store.account.put (transaction, key.pub, nano::account_info (hash, 0, 0, 0, 0, 0, nano::epoch::epoch_0));
+			node->store.account.put (transaction, key.pub, nano::account_info (hash, nullptr, 0, 0, 0, 0, nano::epoch::epoch_0));
 		}
 	}
 	nano::keypair key;
@@ -1858,7 +1858,7 @@ TEST (rpc, pending_burn)
 {
 	nano::system system;
 	auto node = add_ipc_enabled_node (system);
-	nano::account burn (0);
+	nano::account burn (nullptr);
 	system.wallet (0)->insert_adhoc (nano::dev::genesis_key.prv);
 	auto block1 (system.wallet (0)->send_action (nano::dev::genesis_key.pub, burn, 100));
 	auto [rpc, rpc_ctx] = add_rpc (system, node);
@@ -2402,7 +2402,7 @@ TEST (rpc, available_supply)
 	auto response2 (wait_response (system, rpc, request1));
 	ASSERT_EQ ("1", response2.get<std::string> ("available"));
 	rpc_ctx->io_scope->reset ();
-	auto block2 (system.wallet (0)->send_action (nano::dev::genesis_key.pub, 0, 100)); // Sending to burning 0 account
+	auto block2 (system.wallet (0)->send_action (nano::dev::genesis_key.pub, nullptr, 100)); // Sending to burning 0 account
 	rpc_ctx->io_scope->renew ();
 	auto response3 (wait_response (system, rpc, request1, 10s));
 	ASSERT_EQ ("1", response3.get<std::string> ("available"));
@@ -5685,7 +5685,7 @@ TEST (rpc, epoch_upgrade)
 		ASSERT_TRUE (node->store.account.exists (transaction, key1.pub));
 		ASSERT_TRUE (node->store.account.exists (transaction, key2.pub));
 		ASSERT_TRUE (node->store.account.exists (transaction, std::numeric_limits<nano::uint256_t>::max ()));
-		ASSERT_FALSE (node->store.account.exists (transaction, 0));
+		ASSERT_FALSE (node->store.account.exists (transaction, nullptr));
 	}
 
 	rpc_ctx->io_scope->reset ();
@@ -5724,7 +5724,7 @@ TEST (rpc, epoch_upgrade)
 		ASSERT_TRUE (node->store.account.exists (transaction, key2.pub));
 		ASSERT_TRUE (node->store.account.exists (transaction, key3.pub));
 		ASSERT_TRUE (node->store.account.exists (transaction, std::numeric_limits<nano::uint256_t>::max ()));
-		ASSERT_FALSE (node->store.account.exists (transaction, 0));
+		ASSERT_FALSE (node->store.account.exists (transaction, nullptr));
 	}
 }
 
@@ -5778,7 +5778,7 @@ TEST (rpc, epoch_upgrade_multithreaded)
 		ASSERT_TRUE (node->store.account.exists (transaction, key1.pub));
 		ASSERT_TRUE (node->store.account.exists (transaction, key2.pub));
 		ASSERT_TRUE (node->store.account.exists (transaction, std::numeric_limits<nano::uint256_t>::max ()));
-		ASSERT_FALSE (node->store.account.exists (transaction, 0));
+		ASSERT_FALSE (node->store.account.exists (transaction, nullptr));
 	}
 
 	rpc_ctx->io_scope->reset ();
@@ -5817,7 +5817,7 @@ TEST (rpc, epoch_upgrade_multithreaded)
 		ASSERT_TRUE (node->store.account.exists (transaction, key2.pub));
 		ASSERT_TRUE (node->store.account.exists (transaction, key3.pub));
 		ASSERT_TRUE (node->store.account.exists (transaction, std::numeric_limits<nano::uint256_t>::max ()));
-		ASSERT_FALSE (node->store.account.exists (transaction, 0));
+		ASSERT_FALSE (node->store.account.exists (transaction, nullptr));
 	}
 }
 

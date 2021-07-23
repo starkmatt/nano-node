@@ -215,7 +215,7 @@ TEST (wallet, spend)
 	system.wallet (0)->insert_adhoc (nano::dev::genesis_key.prv);
 	nano::keypair key2;
 	// Sending from empty accounts should always be an error.  Accounts need to be opened with an open block, not a send block.
-	ASSERT_EQ (nullptr, system.wallet (0)->send_action (0, key2.pub, 0));
+	ASSERT_EQ (nullptr, system.wallet (0)->send_action (nullptr, key2.pub, 0));
 	ASSERT_NE (nullptr, system.wallet (0)->send_action (nano::dev::genesis_key.pub, key2.pub, std::numeric_limits<nano::uint128_t>::max ()));
 	nano::account_info info2;
 	{
@@ -335,7 +335,7 @@ TEST (wallet, rekey)
 
 TEST (account, encode_zero)
 {
-	nano::account number0 (0);
+	nano::account number0 (nullptr);
 	std::string str0;
 	number0.encode_account (str0);
 
@@ -367,7 +367,7 @@ TEST (account, encode_all)
 
 TEST (account, encode_fail)
 {
-	nano::account number0 (0);
+	nano::account number0 (nullptr);
 	std::string str0;
 	number0.encode_account (str0);
 	str0[16] ^= 1;
@@ -1112,7 +1112,7 @@ TEST (wallet, epoch_2_receive_unopened)
 		auto send1 = wallet.send_action (nano::dev::genesis_key.pub, key.pub, amount, 1);
 
 		// Upgrade unopened account to epoch_2
-		auto epoch2_unopened = nano::state_block (key.pub, 0, 0, 0, node.network_params.ledger.epochs.link (nano::epoch::epoch_2), nano::dev::genesis_key.prv, nano::dev::genesis_key.pub, *system.work.generate (key.pub, node.network_params.network.publish_thresholds.epoch_2));
+		auto epoch2_unopened = nano::state_block (key.pub, 0, nullptr, 0, node.network_params.ledger.epochs.link (nano::epoch::epoch_2), nano::dev::genesis_key.prv, nano::dev::genesis_key.pub, *system.work.generate (key.pub, node.network_params.network.publish_thresholds.epoch_2));
 		ASSERT_EQ (nano::process_result::progress, node.process (epoch2_unopened).code);
 
 		wallet.insert_adhoc (key.prv, false);

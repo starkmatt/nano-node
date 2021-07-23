@@ -99,7 +99,7 @@ bool nano::block_processor::half_full ()
 
 void nano::block_processor::add (std::shared_ptr<nano::block> const & block_a, uint64_t origination)
 {
-	nano::unchecked_info info (block_a, 0, origination, nano::signature_verification::unknown);
+	nano::unchecked_info info (block_a, nullptr, origination, nano::signature_verification::unknown);
 	add (info);
 }
 
@@ -257,7 +257,7 @@ void nano::block_processor::process_batch (nano::unique_lock<nano::mutex> & lock
 		}
 		else
 		{
-			info = nano::unchecked_info (forced.front (), 0, nano::seconds_since_epoch (), nano::signature_verification::unknown);
+			info = nano::unchecked_info (forced.front (), nullptr, nano::seconds_since_epoch (), nano::signature_verification::unknown);
 			forced.pop_front ();
 			hash = info.block->hash ();
 			force = true;

@@ -1484,7 +1484,7 @@ void nano::node::epoch_upgrader_impl (nano::raw_key const & prv_a, nano::epoch e
 	class account_upgrade_item final
 	{
 	public:
-		nano::account account{ 0 };
+		nano::account account{ nullptr };
 		uint64_t modified{ 0 };
 	};
 	class account_tag
@@ -1624,7 +1624,7 @@ void nano::node::epoch_upgrader_impl (nano::raw_key const & prv_a, nano::epoch e
 						std::shared_ptr<nano::block> epoch = builder.state ()
 															 .account (key.account)
 															 .previous (0)
-															 .representative (0)
+															 .representative (nullptr)
 															 .balance (0)
 															 .link (link)
 															 .sign (raw_key, signer)
@@ -1739,7 +1739,7 @@ void nano::node::populate_backlog ()
 {
 	auto done = false;
 	uint64_t const chunk_size = 65536;
-	nano::account next = 0;
+	nano::account next { nullptr };
 	uint64_t total = 0;
 	while (!stopped && !done)
 	{
